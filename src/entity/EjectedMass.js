@@ -2,7 +2,7 @@ var Cell = require('./Cell');
 
 function EjectedMass() {
     Cell.apply(this, Array.prototype.slice.call(arguments));
-	
+	this.mass = Math.floor(Math.random() * 500) + 1;
     this.cellType = 3;
 }
 
@@ -25,7 +25,7 @@ EjectedMass.prototype.onRemove = function(gameServer) {
 
 EjectedMass.prototype.onConsume = function(consumer,gameServer) {
     // Adds mass to consumer
-    consumer.addMass(gameServer.config.ejectMassGain);
+    consumer.addMass(this.mass);
 }
 
 EjectedMass.prototype.moveDone = function(gameServer) {
