@@ -119,7 +119,7 @@ GameServer.prototype.start = function() {
     console.log("[Game] Current game mode is "+this.gameMode.name);
     
     // Player bots (Experimental)
-  
+
     if (this.config.serverBots > 0) {
         var BotLoader = require('./ai/BotLoader.js');
         this.bots = new BotLoader(this,this.config.serverBots);
@@ -181,14 +181,16 @@ GameServer.prototype.getRandomPosition = function() {
 }
 
 GameServer.prototype.getRandomColor = function() {
-    var index = Math.floor(Math.random() * this.colors.length);
-    var color = this.colors[index];
+    var colorRGB = [0xFF, 0x07, (Math.random() * 256) >> 0];
+    colorRGB.sort(function() {
+        return 0.5 - Math.random();
+    });
     return {
-        r: color.r,
-        b: color.b,
-        g: color.g
+        r: colorRGB[0],
+        g: colorRGB[1],
+        b: colorRGB[2]
     };
-}
+};
 
 GameServer.prototype.addNode = function(node) {
     this.nodes.push(node);
@@ -588,7 +590,20 @@ GameServer.prototype.shootVirus = function(parent) {
     this.addNode(newVirus);
     this.setAsMovingNode(newVirus);
 }
-
+GameServer.prototype.shootCell = function(parent) {
+	var parentPos = {
+        x: parent.position.x,
+        y: parent.position.y,
+	};
+	
+    var newVirus = new Entity.piece(this.getNextNodeId(), null, parentPos, this.config.virusStartMass);
+   
+    newVirus.setMoveEngineData(200, 20);
+	
+    // Add to moving cells list
+    this.addNode(newVirus);
+    this.setAsMovingNode(newVirus);
+}
 GameServer.prototype.getCellsInRange = function(cell) {
     var list = new Array();
     var r = cell.getSize(); // Get cell radius (Cell size = radius)
