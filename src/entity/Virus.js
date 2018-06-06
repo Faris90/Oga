@@ -2,8 +2,9 @@ var Cell = require('./Cell');
 
 function Virus() {
     Cell.apply(this, Array.prototype.slice.call(arguments));
-	
+ this.setMoveEngineData(100, Infinity);
     this.cellType = 2;
+this.name = "feed me 7 times for mass"
 }
 
 module.exports = Virus;
@@ -20,8 +21,12 @@ Virus.prototype.feed = function(feeder,gameServer) {
 	
     // Check if the virus is going to explode
     if (this.mass >= gameServer.config.virusBurstMass) {
-        this.mass = gameServer.config.virusStartMass; // Reset mass
-        gameServer.removeNode(this);
+         gameServer.removeNode(this); // Reset mass
+        gameServer.shootCell(this);
+    gameServer.shootCell(this);
+    gameServer.shootCell(this);
+    gameServer.shootCell(this);
+    gameServer.shootCell(this);
     }
 	
 }
